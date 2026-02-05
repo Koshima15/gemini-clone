@@ -31,21 +31,44 @@ const Main = () => {
     sendPrompt(text);
   };
 
-  const handleMic = () => {
-    if (!browserSupportsSpeechRecognition) {
-      alert("Speech recognition not supported in this browser");
-      return;
-    }
-    resetTranscript();
-    SpeechRecognition.startListening({ continuous: false });
-  };
+  // const handleMic = () => {
+  //   if (!browserSupportsSpeechRecognition) {
+  //     alert("Speech recognition not supported in this browser");
+  //     return;
+  //   }
+  //   resetTranscript();
+  //   SpeechRecognition.startListening({ continuous: false });
+  // };
 
-  // when speech stops → put text into input
+  const handleMic = () => {
+  if (!browserSupportsSpeechRecognition) {
+    alert("Speech recognition not supported in this browser");
+    return;
+  }
+
+  resetTranscript();
+
+  SpeechRecognition.startListening({
+    continuous: false,
+    language: "en-US",
+  });
+};
+
+
+  // // when speech stops → put text into input
+  // useEffect(() => {
+  //   if (!listening && transcript) {
+  //     setInput(transcript);
+  //   }
+  // }, [listening, transcript]);
+
   useEffect(() => {
-    if (!listening && transcript) {
-      setInput(transcript);
-    }
-  }, [listening, transcript]);
+  if (!listening && transcript) {
+    setInput(transcript);
+    SpeechRecognition.stopListening();
+  }
+}, [listening, transcript]);
+
 
   // show greeting + cards when no chat OR empty chat
   const showHome =
